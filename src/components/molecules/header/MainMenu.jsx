@@ -1,21 +1,52 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom";
+import { deleteToken, token } from "../../../helpers/auth";
 
 const MainMenu = () => {
+
+  const nav = useNavigate()
+
+  const handleSession = () => {
+    deleteToken()
+    nav("/")
+  }
+  
   return (
     <nav className="w-full">
       <ul className="flex justify-end text-gray-100">
         <li className="flex items-center">
-          <Link className="menu-item" to="/">Inicio</Link>
+          <Link className="menu-item" to="/">
+            Inicio
+          </Link>
         </li>
         <li className="flex items-center">
-          <Link className="menu-item" to="/productos">Productos</Link>
+          <Link className="menu-item" to="/productos">
+            Productos
+          </Link>
         </li>
         <li className="flex items-center">
-          <Link className="menu-item" to="/contactanos">Contactanos</Link>
+          <Link className="menu-item" to="/contactanos">
+            Contáctanos
+          </Link>
         </li>
+        {
+          //  Si no tiene token, le pedimos que inicie sesión, caso contrario tiene que cerrar sesión
+          !token() ? (
+            <li className="flex items-center">
+              <Link className="menu-item" to="/login">
+                Iniciar Sesión
+              </Link>
+            </li>
+          ) : (
+            <li className="flex items-center">
+              <a onClick={handleSession} className="menu-item cursor-pointer">
+                Cerrar Sesión
+              </a>
+            </li>
+          )
+        }
       </ul>
     </nav>
-  )
-}
+  );
+};
 
-export default MainMenu
+export default MainMenu;
